@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    maven {
+        url 'https://yahoo.bintray.com/maven'
+    }
+    jcenter()
+}
+
+dependencies {
+    compile 'com.oath.halodb:halodb:0.5.3'
+    compile 'org.hdrhistogram:HdrHistogram:2.1.9'
+    compile 'com.spotify.sparkey:sparkey:3.0.0'
+
+    testImplementation 'junit:junit:4.12'
+}
+
+application {
+    //mainClassName = 'net.kaoriya.halodb_playground.App'
+    mainClassName = 'com.oath.halodb.benchmarks.BenchmarkTool'
+}
+
+run {
+    if (project.hasProperty('args')) {
+        args project.args.split('\\s+');
+    }
+    if (project.hasProperty('jvmArgs')) {
+        jvmArgs project.jvmArgs.split('\\s+')
+    }
+}
+
+task benchmark_halodb(type: JavaExec) {
+    main = 'com.oath.halodb.benchmarks.BenchmarkTool'
+    classpath = sourceSets.main.runtimeClasspath
+    if (project.hasProperty('args')) {
+        args project.args.split('\\s+');
+    }
+    if (project.hasProperty('jvmArgs')) {
+        jvmArgs project.jvmArgs.split('\\s+')
+    }
+}
