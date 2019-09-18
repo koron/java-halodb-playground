@@ -14,6 +14,7 @@ dependencies {
     compile 'com.oath.halodb:halodb:0.5.3'
     compile 'org.hdrhistogram:HdrHistogram:2.1.9'
     compile 'com.spotify.sparkey:sparkey:3.0.0'
+    compile 'org.lmdbjava:lmdbjava:0.7.0'
 
     testImplementation 'junit:junit:4.12'
 }

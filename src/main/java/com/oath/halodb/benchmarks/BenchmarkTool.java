@@ -57,10 +57,12 @@ public class BenchmarkTool {
         File dir = new File(directoryName);
 
         // select different storage engines here. 
-        final StorageEngine db = new HaloDBStorageEngine(dir, numberOfRecords);
-        //final StorageEngine db = new RocksDBStorageEngine(dir, numberOfRecords);
-        //final StorageEngine db = new KyotoStorageEngine(dir, numberOfRecords);
-        //final StorageEngine db = new SparkeyStorageEngine(dir, numberOfRecords);
+        StorageEngine db;
+        //db = new HaloDBStorageEngine(dir, numberOfRecords);
+        //db = new RocksDBStorageEngine(dir, numberOfRecords);
+        //db = new KyotoStorageEngine(dir, numberOfRecords);
+        //db = new SparkeyStorageEngine(dir, numberOfRecords);
+        db = new LMDBStorageEngine(dir, numberOfRecords);
 
         db.open();
         System.out.println("Opened the database.");
@@ -263,7 +265,7 @@ public class BenchmarkTool {
                 latencyHistogram.recordValue(System.nanoTime()-s);
                 count++;
                 if (value == null) {
-                    System.out.println("NO value for key " +id);
+                    //System.out.println("NO value for key " +id);
                     continue;
                 }
 

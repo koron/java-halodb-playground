@@ -27,6 +27,29 @@ Notes:
 
 1,000,000個のキーの作成に15秒ほどかかる。
 
+### LMDB + sequencial keys
+
+```console
+$ ./gradlew benchmark_halodb -Pargs='tmp/lmdb-seq-001 FILL_SEQUENCE
+
+$ ./gradlew benchmark_halodb -Pargs='tmp/lmdb-seq-001 READ_RANDOM
+```
+
+```
+Completed 20000000 reads with 8 threads in 8 seconds
+Operations per second - 2500000
+Max value - 515375103
+Average value - 3227.989190
+95th percentile - 2000
+99th percentile - 47903
+99.9th percentile - 75263
+99.99th percentile - 100351
+```
+
+Notes:
+
+1,000,000個のキーの作成に60秒ほどかかる。
+
 ### Sparkey + sequencial keys
 
 ```console
