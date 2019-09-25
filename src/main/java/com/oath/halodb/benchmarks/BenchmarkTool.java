@@ -271,6 +271,7 @@ public class BenchmarkTool {
 
         @Override
         public void run() {
+            System.out.printf("Read: start %d\n", id);
             long sum = 0, count = 0;
             long failed = 0;
             long start = System.currentTimeMillis();
