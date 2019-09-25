@@ -15,6 +15,7 @@ dependencies {
     compile 'org.hdrhistogram:HdrHistogram:2.1.9'
     compile 'com.spotify.sparkey:sparkey:3.0.0'
     compile 'org.lmdbjava:lmdbjava:0.7.0'
+    compile 'org.rocksdb:rocksdbjni:5.7.2'
 
     testImplementation 'junit:junit:4.12'
 }

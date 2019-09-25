@@ -44,8 +44,8 @@ public class BenchmarkTool {
         switch (name.toLowerCase()) {
             case "halodb":
                 return new HaloDBStorageEngine(dir, numberOfRecords);
-            //case "rocksdb":
-            //    return new RocksDBStorageEngine(dir, numberOfRecords);
+            case "rocksdb":
+                return new RocksDBStorageEngine(dir, numberOfRecords);
             //case "kyoto":
             //    return new KyotoStorageEngine(dir, numberOfRecords);
             case "sparkey":
