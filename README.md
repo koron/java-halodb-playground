@@ -5,9 +5,9 @@
 ### HaloDB + sequencial keys
 
 ```console
-$ ./gradlew benchmark_halodb -Pargs='tmp/halo-seq-001 FILL_SEQUENCE'
+$ ./gradlew benchmark -Pargs='halodb tmp/halo-seq-001 FILL_SEQUENCE'
 
-$ ./gradlew benchmark_halodb -Pargs='tmp/halo-seq-001 READ_RANDOM'
+$ ./gradlew benchmark -Pargs='halodb tmp/halo-seq-001 READ_RANDOM'
 ```
 
 Result:
@@ -30,34 +30,34 @@ Notes:
 ### LMDB + sequencial keys
 
 ```console
-$ ./gradlew benchmark_halodb -Pargs='tmp/lmdb-seq-001 FILL_SEQUENCE
+$ ./gradlew benchmark -Pargs='lmdb tmp/lmdb-seq-001 FILL_SEQUENCE
 
-$ ./gradlew benchmark_halodb -Pargs='tmp/lmdb-seq-001 READ_RANDOM
+$ ./gradlew benchmark -Pargs='lmdb tmp/lmdb-seq-001 READ_RANDOM
 ```
 
 ```
-Completed 20000000 reads with 8 threads in 8 seconds
-Operations per second - 2500000
-Max value - 515375103
-Average value - 3227.989190
-95th percentile - 2000
-99th percentile - 47903
-99.9th percentile - 75263
-99.99th percentile - 100351
+Completed 20000000 reads with 8 threads in 12 seconds
+Operations per second - 1666666
+Max value - 284688383
+Average value - 4783.480510
+95th percentile - 5903
+99th percentile - 23311
+99.9th percentile - 37407
+99.99th percentile - 56319
 ```
 
 Notes:
 
-1,000,000個のキーの作成に60秒ほどかかる。
+1,000,000個のキーの作成に6秒ほどかかる。
 
 ### Sparkey + sequencial keys
 
 ```console
 $ mkdir -p ./tmp/sparkey-seq-001
 
-$ ./gradlew benchmark_halodb -Pargs='tmp/sparkey-seq-001 FILL_SEQUENCE'
+$ ./gradlew benchmark -Pargs='sparkey tmp/sparkey-seq-001 FILL_SEQUENCE'
 
-$ ./gradlew benchmark_halodb -Pargs='tmp/sparkey-seq-001 READ_RANDOM'
+$ ./gradlew benchmark -Pargs='sparkey tmp/sparkey-seq-001 READ_RANDOM'
 ```
 
 Result:

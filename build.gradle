@@ -33,7 +33,7 @@ run {
     }
 }
 
-task benchmark_halodb(type: JavaExec) {
+task benchmark(type: JavaExec) {
     main = 'com.oath.halodb.benchmarks.BenchmarkTool'
     classpath = sourceSets.main.runtimeClasspath
     if (project.hasProperty('args')) {

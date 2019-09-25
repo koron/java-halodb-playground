@@ -40,9 +40,30 @@ public class BenchmarkTool {
 
     private static RandomDataGenerator randomDataGenerator = new RandomDataGenerator(seed);
 
+    public static StorageEngine newStorageEngine(String name, File dir) throws Exception {
+        switch (name.toLowerCase()) {
+            case "halodb":
+                return new HaloDBStorageEngine(dir, numberOfRecords);
+            //case "rocksdb":
+            //    return new RocksDBStorageEngine(dir, numberOfRecords);
+            //case "kyoto":
+            //    return new KyotoStorageEngine(dir, numberOfRecords);
+            case "sparkey":
+                return new SparkeyStorageEngine(dir, numberOfRecords);
+            case "lmdb":
+                return new LMDBStorageEngine(dir, numberOfRecords);
+            default:
+                System.out.println("unknown storage: " + name);
+                System.exit(1);
+                return null;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
-        String directoryName = args[0];
-        String benchmarkType = args[1];
+        String storageName = args[0];
+        String directoryName = args[1];
+        String benchmarkType = args[2];
+
         Benchmarks benchmark = null;
         try {
             benchmark = Benchmarks.valueOf(benchmarkType);
@@ -57,12 +78,7 @@ public class BenchmarkTool {
         File dir = new File(directoryName);
 
         // select different storage engines here. 
-        StorageEngine db;
-        //db = new HaloDBStorageEngine(dir, numberOfRecords);
-        //db = new RocksDBStorageEngine(dir, numberOfRecords);
-        //db = new KyotoStorageEngine(dir, numberOfRecords);
-        //db = new SparkeyStorageEngine(dir, numberOfRecords);
-        db = new LMDBStorageEngine(dir, numberOfRecords);
+        StorageEngine db = newStorageEngine(storageName, dir);
 
         db.open();
         System.out.println("Opened the database.");
@@ -256,6 +272,7 @@ public class BenchmarkTool {
         @Override
         public void run() {
             long sum = 0, count = 0;
+            long failed = 0;
             long start = System.currentTimeMillis();
 
             while (count < noOfReadsPerThread) {
@@ -266,6 +283,7 @@ public class BenchmarkTool {
                 count++;
                 if (value == null) {
                     //System.out.println("NO value for key " +id);
+                    failed++;
                     continue;
                 }
 
@@ -279,6 +297,9 @@ public class BenchmarkTool {
             time = (System.currentTimeMillis() - start);
 
             System.out.printf("Read: %d Completed in time %d\n", id, time);
+            if (failed > 0) {
+                System.out.printf("  failed keys: %d (%.2f%%) id=%d\n", failed, failed * 100.0f / count, id);
+            }
         }
     }
 

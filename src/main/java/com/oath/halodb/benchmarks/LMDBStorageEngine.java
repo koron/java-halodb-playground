@@ -35,7 +35,12 @@ public class LMDBStorageEngine implements StorageEngine {
         if (val == null) {
             return null;
         }
-        return val.array();
+        if (val.hasArray()) {
+            return val.array();
+        }
+        byte[] b = new byte[val.limit()];
+        val.get(b);
+        return b;
     }
 
     @Override
@@ -45,10 +50,14 @@ public class LMDBStorageEngine implements StorageEngine {
 
     @Override
     public void close() {
-        dbi.close();
-        for (Txn txn : txnSet) {
-            txn.close();
+        for (Txn wtxn : wtxnSet) {
+            wtxn.commit();
+            wtxn.close();
         }
+        for (Txn rtxn : rtxnSet) {
+            rtxn.close();
+        }
+        dbi.close();
     }
 
     private ByteBuffer bb(byte[] src) {
@@ -58,22 +67,24 @@ public class LMDBStorageEngine implements StorageEngine {
         return buf;
     }
 
-    HashSet<Txn<ByteBuffer>> txnSet = new HashSet<>();
+    HashSet<Txn<ByteBuffer>> wtxnSet = new HashSet<>();
 
     private final ThreadLocal<Txn<ByteBuffer>> wtxns = new ThreadLocal<>() {
         @Override
         protected Txn<ByteBuffer> initialValue() {
             var w = env.txnWrite();
-            txnSet.add(w);
+            wtxnSet.add(w);
             return w;
         }
     };
+
+    HashSet<Txn<ByteBuffer>> rtxnSet = new HashSet<>();
 
     private final ThreadLocal<Txn<ByteBuffer>> rtxns = new ThreadLocal<>() {
         @Override
         protected Txn<ByteBuffer> initialValue() {
             var r = env.txnRead();
-            txnSet.add(r);
+            rtxnSet.add(r);
             return r;
         }
     };
