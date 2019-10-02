@@ -76,3 +76,30 @@ Average value - 2067.809050
 Notes:
 
 1,000,000個のキーの作成に2~3秒ほどかかる。
+
+### HaloDB + 100M records (100GB)
+
+How to create 100M records:
+
+```
+$ ./gradlew benchmark -Pargs='halodb tmp/halo-seq-002 FILL_SEQUENCE'
+Completed writing data in 1509
+Write rate 64 MB/sec
+Size of database 100000000
+```
+
+How to make 200M queries against that:
+
+```
+$ ./gradlew benchmark -Pargs='halodb tmp/halo-seq-002 READ_RANDOM'
+```
+
+*   ブートに時間がかかる(数十秒)
+    *   たぶん1分近い
+*   ディスクI/O(リード)で律速してそう
+*   8M (1M x 8thread) queries in 135 seconds
+    *   60K q/s ≒ 60MB/s read (writeと同じだ!)
+    *   使ってるSSDはread 95K IOPS, write 84K IOPS
+*   8 thread で使用メモリが 5GB
+*   450 minutes くらいかかりそう
+*   異常終了するとcollapseして復帰方法がない
