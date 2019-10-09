@@ -103,3 +103,14 @@ $ ./gradlew benchmark -Pargs='halodb tmp/halo-seq-002 READ_RANDOM'
 *   8 thread で使用メモリが 5GB
 *   450 minutes くらいかかりそう
 *   異常終了するとcollapseして復帰方法がない
+
+## Repair
+
+`Ctrl-C` で止めると `HaloDB#close` が呼ばれずDBが corrupt する。
+corrupt 状態のDBを `HaloDB#open` すると、自動的に repair が働く。
+この repair はLinuxでは正しく機能するがWindowsでは機能しない。
+repair の最終段階でオープン状態のファイルのリネームを試みるのだが、
+Linuxでは問題なく成功するのに対しWindowsでは決して成功しない。
+
+なお repair は複数に分かれたデータファイルとインデックスファイルの最後の1つを
+すべて読み込んで書き直して最後にメタ情報を出力しているようだ。
